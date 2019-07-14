@@ -17,7 +17,7 @@ body, #root {
 }
 
 .App-header {
-  background-color: #06751A;
+  background-color: #016fad;
   color: white;
   text-align: center;
   flex: 0 1 auto;
@@ -66,7 +66,7 @@ h3 {
   border: 0px;
   color: rgb(255, 255, 255);
   border-radius: 2px;
-  background-color: #06751A;
+  background-color: #016fad;
 }
 
 @keyframes App-logo-spin {

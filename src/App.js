@@ -20,14 +20,16 @@ var reader = new FileReader();
 //var fullUserList = {};
 
 function loadWeb3() {
-  let web3Injected = window.web3;
+  /*let web3Injected = window.web3;
   if(typeof web3Injected !== 'undefined'){
     console.log("saw injected web3!");
     web3 = new Web3(web3Injected.currentProvider);
   } else {
     console.log("did not see web3 injected!");
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-  }
+  }*/
+  
+  web3 = new Web3(new Web3.providers.HttpProvider("http://35.177.2.48:8545"));
 }
 class App extends Component {
 
@@ -414,7 +416,7 @@ class App extends Component {
           </span>
         );
       } else {
-        return <button color="white" className="Button" onClick={ () => { this.signGuestbook() } }>Sign GuestBook</button>
+        return <button color="white" className="Button" onClick={ () => { this.signGuestbook() } }>Sign IGBook</button>
       }
     }
   }
@@ -602,15 +604,9 @@ class App extends Component {
     }
     console.log(" - image: " + imageHash + " url : " + thisURL);
      // fetch image via proxy, get sha hash, compare to on-chain image hash
-    var proxyURL='https://fierce-temple-74228.herokuapp.com/'+thisURL;
+    var proxyURL=thisURL;
     var request = new Request(proxyURL, {
-      method: 'GET',
-      mode: 'basic',
-      redirect: 'follow',
-      headers: new Headers({
-        'Origin': 'localhost',
-        'x-requested-with':'IGBookReactApp'
-      })
+      method: 'GET'
     });
     try {
       fetch(request).then(function(resp) {
@@ -700,23 +696,25 @@ class App extends Component {
     // console.log("isImage test passed : " + isNewImage + ", lastFour : " + lastFour);
     //lastThree.includes('image');
     var myImage = this.refs.myImageRef;
-    var proxyURL='https://fierce-temple-74228.herokuapp.com/'+this.state.newImageURL;
-    if(isNewImage){
-      outerThis.setState({
-        newImageReady:'Checking image...',
-        newImageSHA:'',
-        myImageVerified:false
-      });
-      // myImage.src = "http://www.unm.edu/~reason/Tesseract.jpg"; // 3dc54764f06ec1f556fc27735a94a436bb28ed21b3ffcf8133c151b9ada68030
-      var request = new Request(proxyURL, {
-      	method: 'GET',
-      	mode: 'basic',
-      	redirect: 'follow',
-      	headers: new Headers({
-      		'Origin': 'localhost',
-          'x-requested-with':'IGBookReactApp'
-      	})
-      });
+	//var proxyURL='https://fierce-temple-74228.herokuapp.com/'+this.state.newImageURL;
+	var proxyURL=this.state.newImageURL;
+	console.log("proxyURL :: "+proxyURL);
+	if(isNewImage){
+	  outerThis.setState({
+	    newImageReady:'Checking image...',
+	    newImageSHA:'',
+	    myImageVerified:false
+	  });
+	 // myImage.src = "http://www.unm.edu/~reason/Tesseract.jpg"; // 3dc54764f06ec1f556fc27735a94a436bb28ed21b3ffcf8133c151b9ada68030
+	 var request = new Request(proxyURL, {
+	   method: 'GET'
+	   //mode: 'basic',
+	        //redirect: 'follow',
+	      //        headers: new Headers({
+	        //      'Origin': 'localhost',
+	        //  'x-requested-with':'IGBookReactApp'
+	      //        })
+	  });
       try {
         fetch(request).then(function(resp) {
           if(resp.ok) {
@@ -793,16 +791,13 @@ class App extends Component {
             <tbody>
               <tr>
               <td style={{"width":"200px"}}>
-                <a href="http://www.enledger.io/" target="_blank"><img src="http://www.enledger.com/EnLedger_glowy_logo_200x200.png" alt="EnLedger-Logo" width="160px"/></a><br />
-                <a href="http://www.enledger.io/" target="_blank">EnLedger.io</a>
               </td>
               <td>
                 <a href="/" target="_blank"><img src="IG_Logo-white.png" alt="IGBooks-Logo" height="100px"/></a><br />
                 <h3>Demo Ethereum IGBook & Image Notary</h3>
               </td>
               <td style={{"width":"250px"}}>
-                See the IGBooks Article<br /><br />
-                See the <a href="https://github.com/Tectract/ethereum-demo-tools" target="_blank">Github Code Repository</a>
+                See the <a href="https://github.com/sharmaabhishek2207/IGBookReactApp" target="_blank">Github Code Repository</a>
               </td></tr>
             </tbody>
           </table>
@@ -839,23 +834,7 @@ class App extends Component {
             <tbody>
               <tr><td style={{"textAlign":"center"}}>
                 <span style={{"fontSize":"15px","fontWeight":"bold"}}>
-                  Thank you for visiting <a href="http://www.enledger.io/" target="_blank">EnLedger.io</a> and the <a href="https://github.com/Tectract/ethereum-demo-tools" target="_blank">Ethereum Guestbook Demo</a>!<br /><br />
-                </span>
-              </td></tr>
-              <tr><td>
-                <span style={{"fontSize":"13px","fontWeight":"bold"}}>
-                  To use this tool you&#39;ll need a connection to an Ethereum network, via:<br />
-                  <span style={{"padding":"0px 0px 0px 6px"}}>
-                    1. start <a href="https://github.com/ethereum/go-ethereum" target="_blank">Ethereum server</a> or <a href="https://github.com/ethereumjs/testrpc" target="_blank">testrpc server</a> running at localhost:8545, then reload this page
-                  </span><br /><span style={{"padding":"0px 0px 0px 6px"}}>
-                    2. Install <a href="https://metamask.io/" target="_blank">Metamask plugin</a>, connect to network of your choice (including Mainnet!), then reload this page
-                  </span><br />
-                  <u>notes</u>: for localhost testrpc (testnet), you don&#39;t need Metamask running, see <a href="https://github.com/Tectract/ethereum-demo-tools/blob/master/README.md" target="_blank">the README</a> for metamask signing locally & ethereumjs-testrpc notes<br />
-                  <u>notes</u>: sometimes you may need to reload once or twice for it to see your web3.eth.accounts[0] account
-                  <br /><br />
-                  Author: <a href="http://www.enledger.io/blog/our-team/" target="_blank">Ryan Molecke</a>, sponsored by <a href="http://blockgeeks.com/" target="_blank">IGBooks.com</a>!<br />
-                  Issues, comments, suggestions? Please use <a href="https://github.com/Tectract/ethereum-demo-tools/issues" target="_blank">this page</a> to start an issue ticket, do not email Ryan for help directly :)<br />
-                  Also check out <a href="http://www.enledger.io/EthDeployer/" target="_blank">Tectract&#39;s EthDeployer!</a>
+                  Thank you for visiting Innovation Garage Demo Guestbook<br /><br />
                 </span>
               </td></tr>
             </tbody>
